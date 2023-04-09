@@ -18,7 +18,7 @@ export async function doConversation(source: Source, question: string, userId: s
             console.log("Response to @" + conversationId + ":\n" + response.text);
             setParentConversationId(conversationId, response.id);
             const message = source == Source.Mention ?
-                    `<@${userId}> You asked: ${question}\n ${response.text}`
+                    `<@${userId}> You asked: ${question}\n${response.text}`
                     : `${response.text}`;
             await say({channel, thread_ts: thread, text: message});
             await removeWaiting(client, channel, timestamp);
