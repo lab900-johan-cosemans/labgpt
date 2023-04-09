@@ -1,29 +1,43 @@
 ChatGPT for Slack
 ---
+Slackbot connected to chatgpt4 api. 
 
-Start an API service for interacting with ChatGPT on Slack.
-This app uses the library at https://github.com/transitive-bullshit/chatgpt-api
+## Usage
 
+You can send a direct message to the Slack Bot:
 
-You can: 
-  - Chat with the bot directly
-  - Mention the bot in a channel or thread & as long as you keep mentioning it, continue the conversation 
+<img src="images/conversation.png" width="400">
 
-The conversation will end automatically after 30 minutes or when you type "end", "stop" or "close"
+Or invite it to a channel and mention it `@YourSlackBot <your question>`:
+
+<img src="images/channel.png" width="400">
+
+Note:
+  - This bot will remember the conversation history and continue the conversation
+  - To reset thread, simply type `close` or `stop` or wait 30 minutes
 
 ## Setup
-### Register for an OpenAI API Key
+
+High level steps to get this bot to work in your slack environment:
+1. Get an OpenAI API key (paid)
+2. Create a Slack App and configure as below
+3. Host this service somewhere (eg GCP) - it listens to the events from Slack and sends requests to OpenAI
+4. Start asking questions! :)
+
+### Get an OpenAI API key
 Sign up at https://platform.openai.com/overview and create a new API key in https://platform.openai.com/account/api-keys
 
-### Setup Slack App
-Check this for the guide how to create a Slack App https://slack.dev/bolt-js/tutorial/getting-started
+### Create a Slack App
 
-And you need these keys for the next step
+Note: Check this for the guide how to create a Slack App https://slack.dev/bolt-js/tutorial/getting-started
+
+You'll need these keys for the next step:
 ```
 SLACK_SIGNING_SECRET=""
 SLACK_BOT_TOKEN=""
 SLACK_APP_TOKEN=""
 ```
+
 In "Basic Information", create an app token and store in SLACK_APP_TOKEN
 
 ```
@@ -64,7 +78,7 @@ app_mention
 message.im
 ```
 
-### Setup your app
+### Start this service
 - Require nodejs >= 18 (required by above library)
 - Create new `.env` and update the information
 ```
@@ -81,17 +95,5 @@ yarn install
 yarn start
 ```
 
-Note: It will open the Chrome browser, and you have to manually do the CAPTCHA
-Or you can use refer to this page to automatically by pass the CAPTCHA https://github.com/transitive-bullshit/chatgpt-api/blob/v3.3.0/readme.md#captchas
 
-## Usage
-- You can send a direct message to the Slack Bot
-
-![](images/conversation.png)
-
-- Or invite it to a channel and mention it `@YourSlackBot <your question>`
-
-![](images/channel.png)
-
-- Note:
-  - To reset thread, simply type `close` or `stop`
+This app uses the library at https://github.com/transitive-bullshit/chatgpt-api
