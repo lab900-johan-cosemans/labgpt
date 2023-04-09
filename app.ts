@@ -7,12 +7,11 @@ import {doConversation, Source} from "./conversation";
 
 dotenv.config();
 
-// Initializes your app with your bot token and signing secret
 const app: App<StringIndexed> = new App({
     token: process.env.SLACK_BOT_TOKEN,
     signingSecret: process.env.SLACK_SIGNING_SECRET,
-    socketMode: true, // add this
-    appToken: process.env.SLACK_APP_TOKEN, // add this
+    socketMode: true,
+    appToken: process.env.SLACK_APP_TOKEN,
 });
 
 app.message(async function ({message, say, client}: { message: MessageEvent, client: WebClient, say: SayFn }
