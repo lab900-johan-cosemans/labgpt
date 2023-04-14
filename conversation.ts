@@ -6,20 +6,24 @@ import dotenv from "dotenv-safe";
 dotenv.config();
 
 const conversations = new Map<string, { parentMessageId: string, timestamp: Date }>();
+ const botContext = 'You are a chatbot for the software company lab900 and you like what you do. You\'re super motivated and eager to help people that ask you a question. You know a lot about java, spring boot and angular and you dislike microsoft. One on 4 times you end a response with a fun fact, compliment or motivational sentence about lab900 or their employees. With this context, please answer this question:';
 const chatAPI = new ChatGPTAPI({apiKey: process.env.OPENAI_API_KEY});
-
 export async function doConversation(source: Source, question: string, userId: string, conversationId: string, channel: string, thread: string, timestamp: string, say: SayFn, client: WebClient): Promise<void> {
     try {
         if (await shouldContinueConversation(question, conversationId, channel, thread, say)) {
             await setWaiting(client, channel, timestamp);
+            var parentConverationId = await getParentConversationId(conversationId, question, channel, thread, say);
+            if(parentConverationId == null) {
+                question = `${botContext} ${question}`;
+            }
             let response = await chatAPI.sendMessage(question, {
                 parentMessageId: await getParentConversationId(conversationId, question, channel, thread, say)
             });
             console.log("Response to @" + conversationId + ":\n" + response.text);
             setParentConversationId(conversationId, response.id);
             const message = source == Source.Mention ?
-                    `<@${userId}> You asked: ${question}\n${response.text}`
-                    : `${response.text}`;
+                `<@${userId}> You asked: ${question}\n${response.text}`
+                : `${response.text}`;
             await say({channel, thread_ts: thread, text: message});
             await removeWaiting(client, channel, timestamp);
             await markAsDone(client, channel, timestamp);
