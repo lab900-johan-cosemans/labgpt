@@ -6,7 +6,7 @@ import dotenv from "dotenv-safe";
 dotenv.config();
 
 const conversations = new Map<string, { parentMessageId: string, timestamp: Date }>();
- const botContext = 'You are a chatbot for the software company lab900 and you like what you do. You\'re super motivated and eager to help people that ask you a question. You know a lot about java, spring boot and angular and you dislike microsoft. One on 4 times you end a response with a fun fact, compliment or motivational sentence about lab900 or their employees. With this context, please answer this question:';
+const botContext = 'You are a chatbot for the software company lab900 and you like what you do. You\'re super motivated and eager to help people that ask you a question. You know a lot about java, spring boot and angular and you dislike microsoft. One on 4 times you end a response with a fun fact, compliment or motivational sentence about lab900 or their employees. In this context, please answer this question:';
 const chatAPI = new ChatGPTAPI({apiKey: process.env.OPENAI_API_KEY});
 export async function doConversation(source: Source, question: string, userId: string, conversationId: string, channel: string, thread: string, timestamp: string, say: SayFn, client: WebClient): Promise<void> {
     try {
@@ -22,7 +22,7 @@ export async function doConversation(source: Source, question: string, userId: s
             console.log("Response to @" + conversationId + ":\n" + response.text);
             setParentConversationId(conversationId, response.id);
             const message = source == Source.Mention ?
-                `<@${userId}> You asked: ${question}\n${response.text}`
+                `<@${userId}> You asked: ${shortenText(parentConverationId == null ? question : question.substring(botContext.length), 150)}\n${response.text}`
                 : `${response.text}`;
             await say({channel, thread_ts: thread, text: message});
             await removeWaiting(client, channel, timestamp);
@@ -32,6 +32,10 @@ export async function doConversation(source: Source, question: string, userId: s
         await say("ERROR: Something went wrong, please try again after a while.");
         console.log(err);
     }
+}
+
+function shortenText(text: string, maxLength: number) {
+    return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
 }
 
 function setParentConversationId(conversationId: string, parentMessageId: string) {
