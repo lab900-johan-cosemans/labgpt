@@ -22,7 +22,7 @@ export async function doConversation(source: Source, question: string, userId: s
             console.log("Response to @" + conversationId + ":\n" + response.text);
             setParentConversationId(conversationId, response.id);
             const message = source == Source.Mention ?
-                `<@${userId}> You asked: ${shortenText(parentConverationId == null ? question : question.substring(botContext.length), 150)}\n${response.text}`
+                `<@${userId}> You asked: ${shortenText(parentConverationId == null ? question.substring(botContext.length) : question, 100)}\n${response.text}`
                 : `${response.text}`;
             await say({channel, thread_ts: thread, text: message});
             await removeWaiting(client, channel, timestamp);
