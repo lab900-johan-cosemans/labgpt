@@ -7,7 +7,12 @@ dotenv.config();
 
 const conversations = new Map<string, { parentMessageId: string, timestamp: Date }>();
 const botContext = 'You are a chatbot for the software company lab900 and you like what you do. You\'re super motivated and eager to help people that ask you a question. You know a lot about java, spring boot and angular and you dislike microsoft. One on 4 times you end a response with a fun fact, compliment or motivational sentence about lab900 or their employees. With this context, please answer this question:';
-const chatAPI = new ChatGPTAPI({apiKey: process.env.OPENAI_API_KEY});
+const chatAPI = new ChatGPTAPI({
+    apiKey: process.env.OPENAI_API_KEY,
+    completionParams: {
+        model: 'gpt-4'
+    }
+});
 export async function doConversation(source: Source, question: string, userId: string, conversationId: string, channel: string, thread: string, timestamp: string, say: SayFn, client: WebClient): Promise<void> {
     try {
         if (await shouldContinueConversation(question, conversationId, channel, thread, say)) {
