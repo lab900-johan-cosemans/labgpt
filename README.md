@@ -95,5 +95,43 @@ yarn install
 yarn start
 ```
 
-
 This app uses the library at https://github.com/transitive-bullshit/chatgpt-api
+
+Bonus: how to install as a service on debian
+
+- install node >= 18 (this is more difficult than it should be)
+- then:
+```
+git clone https://github.com/lab900-johan-cosemans/labgpt.git
+<edit .env>
+sudo npm install -g yarn
+yarn install
+
+sudo nano /lib/systemd/system/labgpt.service
+
+copy: 
+
+[Unit]
+Description=Running slack labgpt service
+After=network.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/npx tsx /home/<user>/labgpt/app.ts
+Restart=always
+WorkingDirectory=/home/<user>/labgpt/
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+sudo systemctl enable labgpt
+sudo systemctl start labgpt
+sudo systemctl restart labgpt
+sudo systemctl stop labgpt
+sudo journalctl -u labgpt.service -f
+sudo systemctl daemon-reload
+git pull
+```
