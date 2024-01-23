@@ -10,7 +10,7 @@ const botContext = 'You are a chatbot for the software company Lab900 and you li
 const chatAPI = new ChatGPTAPI({
     apiKey: process.env.OPENAI_API_KEY,
     completionParams: {
-        model: 'gpt-4'
+        model: 'gpt-4-1106-preview'
     }
 });
 export async function doConversation(source: Source, question: string, userId: string, conversationId: string, channel: string, thread: string, timestamp: string, say: SayFn, client: WebClient): Promise<void> {
