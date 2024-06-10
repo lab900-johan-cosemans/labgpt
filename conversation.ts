@@ -11,7 +11,7 @@ const botContext = 'You are a chatbot for a company that is active in the entert
 const chatAPI = new ChatGPTAPI({
     apiKey: process.env.OPENAI_API_KEY,
     completionParams: {
-        model: 'gpt-4'
+        model: 'gpt-4o'
     }
 });
 export async function doConversation(source: Source, question: string, userId: string, conversationId: string, channel: string, thread: string, timestamp: string, say: SayFn, client: WebClient): Promise<void> {
