@@ -53,6 +53,17 @@ async function shouldContinueConversation(text: string, conversationId: string, 
         await say({channel, thread_ts: thread, text: "Ending conversation"});
         return false;
     }
+    if (text.toLowerCase() == "continue" ||text.toLowerCase() == "reopen") {
+        const currentConversation = conversations[conversationId];
+        if (!currentConversation) {
+            await say({channel, thread_ts: thread, text: "I don't have the required information anymore to continue the conversation!"});
+            return false;
+        }
+
+        conversations[conversationId] = {...currentConversation, timestamp: undefined};
+        await say({channel, thread_ts: thread, text: "Conversation has been reopened"});
+        return false;
+    }
     return true;
 }
 

@@ -15,6 +15,7 @@ Or invite it to a channel and mention it `@YourSlackBot <your question>`:
 Note:
   - This bot will remember the conversation history and continue the conversation
   - To reset thread, simply type `close` or `stop` or wait 30 minutes
+  - If 30 minutes have passed, and you want to continue the conversation, use `reopen` or `continue` to extend it
 
 ## Setup
 
